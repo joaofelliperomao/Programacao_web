@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Interações na Página</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #dynamicText { margin-top: 20px; }
+    #characterCount { margin-top: 10px; }
+    .item-list { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h1>Interações na Página</h1>
+
+<!-- Botão de incrementar e decrementar -->
+<div>
+  <button id="incrementBtn">Incrementar</button>
+  <button id="decrementBtn">Decrementar</button>
+  <span id="counter">0</span>
+</div>
+
+<!-- Campo de texto dinâmico e contador de caracteres -->
+<div id="dynamicText">
+  <input type="text" id="textInput" placeholder="Digite sua mensagem...">
+  <p id="characterCount">Caracteres: 0</p>
+</div>
+
+<!-- Botão para adicionar itens -->
+<div>
+  <button id="addItemBtn">Adicionar Novo Item</button>
+  <select id="itemType">
+    <option value="ul">Lista Não Ordenada</option>
+    <option value="ol">Lista Ordenada</option>
+  </select>
+</div>
+<div id="itemContainer"></div>
+
+<!-- Botão de reset -->
+<button id="resetBtn">Reset</button>
+
+<script>
+  let counter = 0;
+
+  // Incrementar e decrementar com alert para zero
+  document.getElementById('incrementBtn').onclick = () => {
+    document.getElementById('counter').textContent = ++counter;
+  };
+
+  document.getElementById('decrementBtn').onclick = () => {
+    if (counter > 0) {
+      document.getElementById('counter').textContent = --counter;
+    } else {
+      alert('O contador já está em zero!');
+    }
+  };
+
+  // Adicionar parágrafos dinamicamente
+  const textInput = document.getElementById('textInput');
+  textInput.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
+      const p = document.createElement('p');
+      p.textContent = textInput.value;
+      document.body.appendChild(p);
+      textInput.value = '';
+    }
+  });
+
+  // Contador de caracteres sem espaços
+  textInput.addEventListener('input', () => {
+    const charCount = textInput.value.replace(/\s+/g, '').length;
+    document.getElementById('characterCount').textContent = `Caracteres: ${charCount}`;
+  });
+
+  // Adicionar lista dinamicamente
+  document.getElementById('addItemBtn').onclick = () => {
+    const type = document.getElementById('itemType').value;
+    const list = document.createElement(type);
+    const listItem = document.createElement('li');
+    listItem.textContent = 'Novo Item';
+    list.appendChild(listItem);
+    document.getElementById('itemContainer').appendChild(list);
+  };
+
+  // Resetar tudo
+  document.getElementById('resetBtn').onclick = () => {
+    counter = 0;
+    document.getElementById('counter').textContent = counter;
+    document.querySelectorAll('p').forEach(p => p.remove());
+    document.getElementById('itemContainer').innerHTML = '';
+    textInput.value = '';
+    document.getElementById('characterCount').textContent = 'Caracteres: 0';
+  };
+</script>
+
+</body>
+</html>
