@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"content="width=device-width, initial-scale=1.0">
+    <title>
+        Exercicio
+    </title>
+
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f4f4f4;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+        .container {
+          background-color: white;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          width: 300px;
+        }
+        input, button, select {
+          width: 100%;
+          padding: 10px;
+          margin: 10px 0;
+          box-sizing: border-box;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+        }
+        table {
+          width: 100%;
+          margin-top: 20px;
+          border-collapse: collapse;
+        }
+        table, th, td {
+          border: 1px solid #ccc;
+        }
+        td {
+          padding: 8px;
+          text-align: center;
+        }
+        .marked {
+          background-color: yellow;
+        }
+        .alert {
+          color: red;
+          font-weight: bold;
+        }
+      </style>
+
+</head>
+<body>
+    <div class="container">
+        <h2>Gerenciamento de Itens</h2>
+    
+        <label for="item">Adicionar Item:</label>
+        <input type="text" id="item" placeholder="Digite o item" />
+        <button id="addButton">Adicionar</button>
+        <p id="alertMessage" class="alert"></p>
+    
+        <label for="itemSelect">Selecione um item:</label>
+        <select id="itemSelect">
+          <option value="">-- Selecione --</option>
+        </select>
+    
+        <button id="markButton">Marcar</button>
+        <button id="unmarkButton">Desmarcar</button>
+        <button id="removeButton">Remover</button>
+    
+        <table id="itemTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Item</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+  <script>
+    let items = [];
+    
+    // Função para adicionar o item à tabela
+    function addItem() {
+      const itemInput = document.getElementById('item');
+      const item = itemInput.value.trim();
+    
+      if (item) {
+        items.push(item);
+        updateTable();
+        updateSelectOptions();
+        itemInput.value = '';  // Limpar o campo
+        document.getElementById('alertMessage').textContent = '';  // Limpar mensagem de alerta
+      } else {
+        document.getElementById('alertMessage').textContent = 'Por favor, insira um item válido!';
+      }
+    }
+    
+    // Função para atualizar a tabela
+    function updateTable() {
+      const tbody = document.getElementById('itemTable').getElementsByTagName('tbody')[0];
+      tbody.innerHTML = ''; // Limpar a tabela antes de atualizar
+    
+      items.forEach((item, index) => {
+        const row = tbody.insertRow();
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        cell1.textContent = index + 1;
+        cell2.textContent = item;
+        row.setAttribute('data-index', index); // Armazenar o índice do item
+      });
+    }
+    
+    // Função para atualizar o menu de seleção
+    function updateSelectOptions() {
+      const select = document.getElementById('itemSelect');
+      select.innerHTML = '<option value="">-- Selecione --</option>';
+    
+      items.forEach((item, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = item;
+        select.appendChild(option);
+      });
+    }
+    
+    // Função para marcar o item
+    function markItem() {
+      const selectedIndex = document.getElementById('itemSelect').value;
+      if (selectedIndex === '') return;
+    
+      const row = document.querySelector(`#itemTable tbody tr[data-index='${selectedIndex}']`);
+      if (row) {
+        row.classList.add('marked');
+      }
+    }
+    
+    // Função para desmarcar o item
+    function unmarkItem() {
+      const selectedIndex = document.getElementById('itemSelect').value;
+      if (selectedIndex === '') return;
+    
+      const row = document.querySelector(`#itemTable tbody tr[data-index='${selectedIndex}']`);
+      if (row) {
+        if (row.classList.contains('marked')) {
+          row.classList.remove('marked');
+        } else {
+          alert('Não é possível desmarcar, pois o item não está marcado!');
+        }
+      }
+    }
+    
+    // Função para remover o item
+    function removeItem() {
+      const selectedIndex = document.getElementById('itemSelect').value;
+      if (selectedIndex === '') return;
+    
+      items.splice(selectedIndex, 1); // Remover o item do array
+      updateTable(); // Atualizar a tabela
+      updateSelectOptions(); // Atualizar as opções do menu
+    }
+    
+    // Eventos
+    document.getElementById('addButton').addEventListener('click', addItem);
+    document.getElementById('item').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addItem();
+    });
+    document.getElementById('markButton').addEventListener('click', markItem);
+    document.getElementById('unmarkButton').addEventListener('click', unmarkItem);
+    document.getElementById('removeButton').addEventListener('click', removeItem);
+  </script>
+</body>
+</html>
