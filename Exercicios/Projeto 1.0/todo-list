@@ -1,0 +1,16 @@
+todo-list/
+│
+├── backend/
+│   ├── index.js               
+│   ├── tasks.json             
+│   ├── emailService.js        
+│   └── routes/
+│       └── tasks.js          
+│
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── script.js
+│
+├── package.json
+└── README.md
